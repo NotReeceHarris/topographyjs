@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "tw": "npx tailwindcss -i ./tailwind.css -o ./style.min.css --watch --minify"
+    }
+}

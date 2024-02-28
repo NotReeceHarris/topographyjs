@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topography.js test</title>
+    <link rel="stylesheet" href="./style.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-background">
+    <div class="absolute top-1/2 left-1/2 [transform:translate(-50%,-50%);] w-[60%] h-[60%] flex flex-col gap-3">
+        <div class="bg-background text-white whitespace-nowrap font-black text-background w-full h-full rounded-md overflow-hidden select-none text-[0.5rem]" id="map"></div>
+        <div class=" text-white/[.6] text-xs font-light flex gap-2">
+            Seed:
+            <input type="text" id="seed" class="bg-transparent w-full">
+        </div>
+    </div>
+</body>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@v0.153.0/build/three.module.js",
+      "simplex-noise": "https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm",
+      "three-fatline": "https://cdn.jsdelivr.net/npm/three-fatline@0.6.2/+esm",
+      "accum": "../accum.js",
+      "alea": "../alea.js"
+    }
+  }
+</script>
+
+
+<script type="module">
+
+    import Topography from '../topography.js';
+
+    function generateSeed() {
+        var length = 30,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
+
+    const seedEl = document.getElementById('seed');
+    const seed = generateSeed();
+    seedEl.value = seed;
+
+    const topography = new Topography("map", seed);
+    // const ascii = topography.ascii();
+    const lines = topography.lines();
+
+    seedEl.addEventListener('input', () => {
+        topography.updateSeed(seedEl.value);
+        lines()
+    })
+
+</script>
+
+</html>

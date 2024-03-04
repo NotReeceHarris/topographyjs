@@ -17,6 +17,13 @@
             Seed:
             <input type="text" id="seed" class="bg-transparent w-full">
         </div>
+        <div class=" text-white/[.6] text-xs font-light flex gap-2">
+            Style:
+            <select id="style" class="bg-transparent w-full">
+                <option value="ascii">Ascii</option>
+                <option value="lines">Lines</option>
+            </select>
+        </div>
     </div>
 </body>
 
@@ -26,8 +33,8 @@
       "three": "https://unpkg.com/three@v0.153.0/build/three.module.js",
       "simplex-noise": "https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm",
       "three-fatline": "https://cdn.jsdelivr.net/npm/three-fatline@0.6.2/+esm",
-      "accum": "../accum.js",
-      "alea": "../alea.js"
+      "accum": "./accum.js",
+      "alea": "./alea.js"
     }
   }
 </script>
@@ -47,17 +54,27 @@
         return retVal;
     }
 
+    document.getElementById('style').addEventListener('change', () => {
+        console.log('style changed')
+    })
+
     const seedEl = document.getElementById('seed');
+    const styleEl = document.getElementById('style');
     const seed = generateSeed();
     seedEl.value = seed;
 
     const topography = new Topography("map", seed);
-    // const ascii = topography.ascii();
-    const lines = topography.lines();
+    let topo = styleEl.value === 'ascii' ? topography.ascii() : topography.lines();
 
     seedEl.addEventListener('input', () => {
         topography.updateSeed(seedEl.value);
-        lines()
+        topo()
+    })
+
+    styleEl.addEventListener('change', () => {
+        topo = styleEl.value === 'ascii' ? topography.ascii() : topography.lines();
+        topo()
+        console.log('style changed')
     })
 
 </script>
